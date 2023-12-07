@@ -403,6 +403,11 @@ func (linodeCS *LinodeControllerServer) ListVolumes(ctx context.Context, req *cs
 	for _, vol := range volumes {
 		key := common.CreateLinodeVolumeKey(vol.ID, vol.Label)
 
+		var publishInfoVolumeName []string = make([]string, 0, 1)
+		if vol.LinodeID != nil {
+			publishInfoVolumeName = append(publishInfoVolumeName, fmt.Sprintf("%d", vol.LinodeID))
+		}
+
 		entries = append(entries, &csi.ListVolumesResponse_Entry{
 			Volume: &csi.Volume{
 				VolumeId:      key.GetVolumeKey(),
@@ -414,6 +419,9 @@ func (linodeCS *LinodeControllerServer) ListVolumes(ctx context.Context, req *cs
 						},
 					},
 				},
+			},
+			Status: &csi.ListVolumesResponse_VolumeStatus{
+				PublishedNodeIds: publishInfoVolumeName,
 			},
 		})
 	}
