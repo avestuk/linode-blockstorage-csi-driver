@@ -422,6 +422,9 @@ func (linodeCS *LinodeControllerServer) ListVolumes(ctx context.Context, req *cs
 			},
 			Status: &csi.ListVolumesResponse_VolumeStatus{
 				PublishedNodeIds: publishInfoVolumeName,
+				VolumeCondition: &csi.VolumeCondition{
+					Abnormal: false,
+				},
 			},
 		})
 	}
